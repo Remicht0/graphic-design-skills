@@ -1,15 +1,17 @@
 name: Release
 
-# Push a tag like v0.2.0 to publish one .zip per skill (for Claude's "Upload a skill").
+# Publish a release on GitHub (Releases → Draft a new release → tag e.g. v0.1.0 → Publish).
+# This workflow then builds one .zip per skill and attaches them, ready for
+# Claude's "Upload a skill".
 on:
-  push:
-    tags: ["v*"]
+  release:
+    types: [published]
 
 permissions:
   contents: write
 
 jobs:
-  release:
+  assets:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,7 +20,7 @@ jobs:
           python-version: "3.12"
       - run: python scripts/validate.py
       - run: python scripts/package.py
-      - name: Create release
+      - name: Attach skill zips
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/*.zip --title "$GITHUB_REF_NAME" --generate-notes
+        run: gh release upload "${{ github.event.release.tag_name }}" dist/*.zip --clobber

@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.DS_Store
+dist/
+previews/
+.previews/
+# fonts downloaded locally with scripts/fonts.py (licensed separately)
+skills/editorial-layout/templates/fonts/
+# local test output
+out/
+.pytest_cache/

@@ -1,0 +1,31 @@
+{
+  "name": "graphic-design-skills",
+  "owner": {
+    "name": "Remicht0",
+    "url": "https://github.com/Remicht0"
+  },
+  "metadata": {
+    "description": "Agent skills for graphic designers: dithering, palettes, print preflight, art direction analysis and editorial layout.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "graphic-design-skills",
+      "description": "Agent skills for graphic designers: dithering and halftone, color palettes, print preflight, website art-direction analysis and editorial PDF layout.",
+      "version": "0.1.0",
+      "source": "./",
+      "strict": false,
+      "license": "MIT",
+      "homepage": "https://github.com/Remicht0/graphic-design-skills",
+      "repository": "https://github.com/Remicht0/graphic-design-skills",
+      "keywords": ["design", "graphic-design", "print", "typography", "color", "dither", "layout", "pdf"],
+      "skills": [
+        "./skills/art-direction-analyzer",
+        "./skills/dither",
+        "./skills/editorial-layout",
+        "./skills/palette",
+        "./skills/print-preflight"
+      ]
+    }
+  ]
+}

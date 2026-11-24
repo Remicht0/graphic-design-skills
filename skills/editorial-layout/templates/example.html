@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Slow Roast — identity brief</title>
+<!--
+  Example document for the editorial-layout skill. A4 landscape, 6 pages,
+  each built from a different composition. Render with:
+    python3 ../scripts/render.py example.html -o example.pdf --png previews --sheet sheet.png
+
+  When you copy this file to start a new document, copy ../assets/print.css
+  next to it and change the stylesheet link below to href="print.css".
+  "Slow Roast" is a fictional brand. Photo: CC0, Rachel Michetti (scikit-image sample data).
+-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@200;400;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css"><!-- optional local fonts (scripts/fonts.py) -->
+<link rel="stylesheet" href="../assets/print.css">
+<style>
+  :root { --accent: #FF4F12; --paper: #F1EFEA; --ink: #151515; }
+</style>
+</head>
+<body>
+
+<!-- 1 · Cover: image bleeding top-left, giant word bleeding off the bottom -->
+<section class="page">
+  <div class="img pixel x1 w7 y1 h5 bleed-l bleed-t"><img src="img/coffee-atkinson.png" alt="Espresso cup, dithered"></div>
+  <p class="micro x9 w4 y1">Identity brief<br>Bordeaux, 2026</p>
+  <p class="lead x9 w4 y2 h3">A roastery that takes its time, and an identity that shows it.</p>
+  <div class="x1 w12 y6 h3 bottom bleed-b">
+    <h1 class="display" data-fit="1" style="line-height:.78">Slow Roast</h1>
+  </div>
+</section>
+
+<!-- 2 · Statement: big type, one small text block in the corner -->
+<section class="page">
+  <p class="micro x1 w2 y1">(01) Approach</p>
+  <h2 class="display x1 w12 y2 h5" style="font-size:150pt">Roast less,<br><span class="accent-c">taste more.</span></h2>
+  <div class="x9 w3 y7 h2 bottom">
+    <p class="text">Light roasts, small batches, beans from four farms we visit every year.</p>
+    <p class="text">The brand stays as quiet as the coffee: one typeface for shouting, one for talking.</p>
+  </div>
+</section>
+
+<!-- 3 · Split: full-height halftone image, text on the right -->
+<section class="page">
+  <div class="img x1 w6 y1 h8 bleed-l bleed-t bleed-b"><img src="img/coffee-halftone.png" alt="Espresso cup, halftone"></div>
+  <p class="micro x8 w2 y1">(02) Image</p>
+  <div class="x8 w4 y5 h4 bottom stack">
+    <p class="lead">Photos are never shown raw. Every image goes through the same halftone screen, in ink on paper.</p>
+    <p class="text">It ties together pictures from different phones and seasons, and prints well on cheap paper bags.</p>
+  </div>
+</section>
+
+<!-- 4 · Giant thin number sliding off the edge -->
+<section class="page">
+  <p class="micro x1 w2 y1">(03) Rest</p>
+  <div class="x4 w9 y2 h6 mid">
+    <p class="display thin num" style="font-size:470pt;line-height:.8;letter-spacing:-0.05em">72<span class="unit">h</span></p>
+  </div>
+  <p class="text x1 w3 y7 h2 bottom">Every batch rests 72 hours before it is sold. The packaging says so, in big numbers.</p>
+</section>
+
+<!-- 5 · Dark page: quote + small round photo -->
+<section class="page alt">
+  <p class="micro x1 w2 y1">(04) Voice</p>
+  <div class="img round x2 w3 y3 h3" style="aspect-ratio:1;height:auto;align-self:start"><img src="img/coffee.jpg" alt="Espresso cup"></div>
+  <blockquote class="x6 w6 y3 h4 mid" style="margin:0">
+    <p class="display serif wrap" style="font-size:54pt">“Good coffee is a slow <span class="it accent-c">thing</span>, and so is trust.”</p>
+  </blockquote>
+  <p class="micro x6 w4 y8 bottom">Tone of voice — short, warm, never in a hurry</p>
+</section>
+
+<!-- 6 · Palette: color blocks bleeding off the bottom -->
+<section class="page">
+  <p class="micro x1 w2 y1">(05) Color</p>
+  <h2 class="display serif x1 w6 y2 h3" style="font-size:72pt">Four colors,<br><span class="it">one</span> loud.</h2>
+  <p class="text x9 w3 y2 h2">Paper and ink do the work. Orange is kept for a single thing per page: a price, a date, a word.</p>
+  <div class="x1 w3 y5 h4 bleed-l bleed-b" style="background:#F1EFEA;outline:.2mm solid #151515;outline-offset:-.1mm;padding:5mm 5mm 5mm 14mm"><p class="micro">Paper<br>#F1EFEA</p></div>
+  <div class="x4 w3 y5 h4 bleed-b" style="background:#151515;color:#F1EFEA;padding:5mm"><p class="micro">Ink<br>#151515</p></div>
+  <div class="x7 w3 y5 h4 bleed-b" style="background:#5B1609;color:#F1EFEA;padding:5mm"><p class="micro">Roast<br>#5B1609</p></div>
+  <div class="x10 w3 y5 h4 bleed-r bleed-b" style="background:#FF4F12;padding:5mm"><p class="micro">Signal<br>#FF4F12</p></div>
+</section>
+
+</body>
+</html>

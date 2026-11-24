@@ -1,0 +1,28 @@
+name: Skill idea
+description: Propose a new skill (or a big improvement to one)
+labels: ["skill idea"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What design task should the skill handle?
+      description: Describe the job as a designer would ask for it. Example requests help a lot.
+      placeholder: '"Make a risograph separation of this poster in pink and blue"'
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: What should come out?
+      description: Files, formats, sizes. Where will the result be used?
+  - type: textarea
+    id: knowledge
+    attributes:
+      label: Design knowledge the agent needs
+      description: The judgement calls, rules of thumb and common mistakes a good designer would know.
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Contribution
+      options:
+        - label: I'd like to write this skill (or help)

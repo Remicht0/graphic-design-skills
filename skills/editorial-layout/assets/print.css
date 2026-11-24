@@ -1,0 +1,170 @@
+/* ==========================================================================
+   print.css — editorial page system for HTML → PDF
+   Part of the editorial-layout skill (graphic-design-skills).
+
+   One <section class="page"> = one printed page. Each page is a 12 × 8
+   grid inside the margins; place blocks with x/w (columns) and y/h (rows).
+   Bleed is handled by render.py (--bleed): .bleed-* utilities reach the
+   cut edge plus bleed.
+   ========================================================================== */
+
+:root {
+  /* page — render.py --format overrides these and the @page size */
+  --pw: 297mm;
+  --ph: 210mm;
+  --bleed: 0mm;
+  --margin: 9mm;
+  --gutter: 4mm;
+
+  /* color: one paper, one ink, ONE accent */
+  --paper: #F1EFEA;
+  --ink: #151515;
+  --accent: #FF4F12;
+
+  /* type system: display / text / micro (+ serif accent, mono) */
+  --font-display: "Anton", "Archivo Black", "Impact", sans-serif;
+  --font-text: "Inter", "Helvetica Neue", "Arial", sans-serif;
+  --font-serif: "Instrument Serif", "Cardo", "Georgia", serif;
+  --font-mono: "JetBrains Mono", "DejaVu Sans Mono", ui-monospace, monospace;
+
+  --text: 8.6pt;
+  --lead: 13pt;
+  --micro: 6.6pt;
+}
+
+@page { size: 297mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: #888;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-family: var(--font-text);
+  font-size: var(--text);
+  line-height: 1.38;
+  color: var(--ink);
+  font-kerning: normal;
+  font-feature-settings: "kern", "liga";
+  text-rendering: geometricPrecision;
+}
+
+/* ---------------------------------------------------------------- page */
+.page {
+  position: relative;
+  width: calc(var(--pw) + 2 * var(--bleed));
+  height: calc(var(--ph) + 2 * var(--bleed));
+  padding: calc(var(--margin) + var(--bleed));
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(8, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: var(--gutter);
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  break-after: page;
+  page-break-after: always;
+}
+.page:last-child { break-after: auto; page-break-after: auto; }
+.page.alt    { background: var(--ink);    color: var(--paper); }
+.page.accent { background: var(--accent); color: var(--ink); }
+@media screen { .page { margin: 0 auto 12mm; box-shadow: 0 2px 14px rgba(0,0,0,.25); } }
+
+/* ---------------------------------------------------------------- placement
+   x = first column (1–12), w = columns spanned
+   y = first row (1–8),     h = rows spanned                                 */
+.x1{grid-column-start:1}.x2{grid-column-start:2}.x3{grid-column-start:3}.x4{grid-column-start:4}
+.x5{grid-column-start:5}.x6{grid-column-start:6}.x7{grid-column-start:7}.x8{grid-column-start:8}
+.x9{grid-column-start:9}.x10{grid-column-start:10}.x11{grid-column-start:11}.x12{grid-column-start:12}
+.w1{grid-column-end:span 1}.w2{grid-column-end:span 2}.w3{grid-column-end:span 3}.w4{grid-column-end:span 4}
+.w5{grid-column-end:span 5}.w6{grid-column-end:span 6}.w7{grid-column-end:span 7}.w8{grid-column-end:span 8}
+.w9{grid-column-end:span 9}.w10{grid-column-end:span 10}.w11{grid-column-end:span 11}.w12{grid-column-end:span 12}
+.y1{grid-row-start:1}.y2{grid-row-start:2}.y3{grid-row-start:3}.y4{grid-row-start:4}
+.y5{grid-row-start:5}.y6{grid-row-start:6}.y7{grid-row-start:7}.y8{grid-row-start:8}
+.h1{grid-row-end:span 1}.h2{grid-row-end:span 2}.h3{grid-row-end:span 3}.h4{grid-row-end:span 4}
+.h5{grid-row-end:span 5}.h6{grid-row-end:span 6}.h7{grid-row-end:span 7}.h8{grid-row-end:span 8}
+
+/* alignment inside a cell */
+.top{align-self:start}.mid{align-self:center}.bottom{align-self:end}
+.left{justify-self:start}.right{justify-self:end;text-align:right}
+.stack{display:flex;flex-direction:column;gap:3mm}
+.stack.end{justify-content:flex-end}
+
+/* bleed: push a block from the margin to the cut edge (+ bleed) */
+.bleed-l{margin-left:calc(-1 * (var(--margin) + var(--bleed)))}
+.bleed-r{margin-right:calc(-1 * (var(--margin) + var(--bleed)))}
+.bleed-t{margin-top:calc(-1 * (var(--margin) + var(--bleed)))}
+.bleed-b{margin-bottom:calc(-1 * (var(--margin) + var(--bleed)))}
+.bleed{margin:calc(-1 * (var(--margin) + var(--bleed)))}
+
+/* free positioning in mm when the grid is not enough */
+.abs{position:absolute}
+
+/* ---------------------------------------------------------------- type */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: .86;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  margin: 0;
+  white-space: nowrap;
+}
+.display.low   { text-transform: none; }
+.display.thin  { font-family: var(--font-text); font-weight: 200; letter-spacing: -0.04em; }
+.display.serif { font-family: var(--font-serif); text-transform: none; letter-spacing: -0.02em; line-height: .9; }
+.display.wrap  { white-space: normal; }
+.outline { color: transparent; -webkit-text-stroke: .35mm currentColor; }
+
+.text  { font-size: var(--text); line-height: 1.38; max-width: 78mm; margin: 0; hyphens: auto; }
+.lead  { font-size: var(--lead); line-height: 1.22; letter-spacing: -0.005em; max-width: 120mm; margin: 0; }
+.micro {
+  font-family: var(--font-mono);
+  font-size: var(--micro);
+  line-height: 1.3;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.it  { font-family: var(--font-serif); font-style: italic; text-transform: none; letter-spacing: 0; }
+.num { font-variant-numeric: tabular-nums lining-nums; }
+.unit { font-size: .36em; vertical-align: top; letter-spacing: 0; text-transform: none; }
+.accent-c { color: var(--accent); }
+.hl { background: var(--accent); color: var(--ink); padding: 0 .15em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.vertical { writing-mode: vertical-rl; transform: rotate(180deg); }
+p + p.text { margin-top: 2.2mm; }
+
+/* ---------------------------------------------------------------- images */
+.img { position: relative; overflow: hidden; min-height: 0; min-width: 0; }
+.img img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.img.contain img { object-fit: contain; }
+.bw img { filter: grayscale(1) contrast(1.08); }
+/* duotone: ink-colored shadows on the accent */
+.duo { background: var(--accent); }
+.duo img { filter: grayscale(1) contrast(1.15); mix-blend-mode: multiply; }
+.pixel img { image-rendering: pixelated; }
+.round { border-radius: 50%; }
+
+/* ---------------------------------------------------------------- preview helpers (render.py --grid) */
+.show-grid .page::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--margin) + var(--bleed));
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(to right,
+      rgba(255,0,140,.10) 0,
+      rgba(255,0,140,.10) calc((100% - 11 * var(--gutter)) / 12),
+      transparent calc((100% - 11 * var(--gutter)) / 12),
+      transparent calc((100% - 11 * var(--gutter)) / 12 + var(--gutter)));
+  outline: .2mm solid rgba(255,0,140,.5);
+}
+.show-trim .page::before {
+  content: "";
+  position: absolute;
+  inset: var(--bleed);
+  outline: .2mm dashed rgba(0,160,255,.9);
+  pointer-events: none;
+  z-index: 99;
+}

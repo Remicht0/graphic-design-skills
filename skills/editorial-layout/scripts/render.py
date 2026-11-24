@@ -108,20 +108,37 @@ CHECK_JS = r"""
     });
     // overlapping text: compare the inked area (text ranges) of top-level blocks
     const blocks = [...page.children].filter((c) => c.innerText && c.innerText.trim());
+    // text line boxes: a glyph's content box is taller than its line when line-height is tight
+    // (display type at .8), so each rect is trimmed to the line-height of its own element.
+    const lineRects = (blk) => {
+      const out = [];
+      const walker = document.createTreeWalker(blk, NodeFilter.SHOW_TEXT);
+      for (let t = walker.nextNode(); t; t = walker.nextNode()) {
+        if (!t.textContent.trim()) continue;
+        const cs = getComputedStyle(t.parentElement);
+        const fs = parseFloat(cs.fontSize);
+        const lh = cs.lineHeight === 'normal' ? fs * 1.2 : parseFloat(cs.lineHeight);
+        const rg = document.createRange();
+        rg.selectNodeContents(t);
+        for (const r of rg.getClientRects()) {
+          if (r.width <= 0 || r.height <= 0) continue;
+          const trim = Math.max(0, (r.height - lh) / 2);
+          out.push({left: r.left, right: r.right, top: r.top + trim, bottom: r.bottom - trim});
+        }
+      }
+      return out;
+    };
     const inked = blocks.map((blk) => {
-      const range = document.createRange();
-      range.selectNodeContents(blk);
-      const rects = [...range.getClientRects()].filter((r) => r.width > 0 && r.height > 0);
+      const rects = lineRects(blk);
       if (!rects.length) return null;
-      return {l: Math.min(...rects.map((r) => r.left)), t: Math.min(...rects.map((r) => r.top)),
-              r: Math.max(...rects.map((r) => r.right)), b: Math.max(...rects.map((r) => r.bottom)),
-              s: blk.innerText.trim().replace(/\s+/g, ' ').slice(0, 28)};
+      return {rects, s: blk.innerText.trim().replace(/\s+/g, ' ').slice(0, 28)};
     });
+    // compare line boxes one by one (a union box would flag blocks whose text merely surrounds another)
+    const hits = (A, B) => A.rects.some((p) => B.rects.some((q) =>
+      Math.min(p.right, q.right) - Math.max(p.left, q.left) > 2 && Math.min(p.bottom, q.bottom) - Math.max(p.top, q.top) > 2));
     for (let a = 0; a < inked.length; a++) for (let c = a + 1; c < inked.length; c++) {
       const A = inked[a], B = inked[c];
-      if (!A || !B) continue;
-      const ix = Math.min(A.r, B.r) - Math.max(A.l, B.l), iy = Math.min(A.b, B.b) - Math.max(A.t, B.t);
-      if (ix > 2 && iy > 2) issues.push({page: n, level: 'WARN', msg: `text blocks overlap: "${A.s}" / "${B.s}"`});
+      if (A && B && hits(A, B)) issues.push({page: n, level: 'WARN', msg: `text blocks overlap: "${A.s}" / "${B.s}"`});
     }
     // images: effective resolution at printed size
     page.querySelectorAll('img').forEach((img) => {
